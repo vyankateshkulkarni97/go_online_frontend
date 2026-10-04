@@ -8,13 +8,13 @@ import {
     Typography,
     Paper,
     Link,
+    MenuItem,
 } from "@mui/material";
 
 import { registerUser } from "../services/authApi";
-
+import "./css/Register.css";
 
 function Register() {
-
     const navigate = useNavigate();
 
     const [form, setForm] = useState({
@@ -24,215 +24,164 @@ function Register() {
         email: "",
         phone: "",
         password: "",
+        role: "CUSTOMER",
     });
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
+    // Handle input changes
+    const handleChange = (event) => {
+        const { name, value } = event.target;
 
-    const handleChange = (e) => {
-
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value,
-        });
-
-    };
-
-
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
+        setForm((previousForm) => ({
+            ...previousForm,
+            [name]: value,
+        }));
 
         setError("");
+    };
 
-        // Basic validation
+    // Validate form
+    const validateForm = () => {
         if (!form.username.trim()) {
-            setError("Username is required.");
-            return;
+            return "Username is required.";
         }
 
         if (!form.first_name.trim()) {
-            setError("First name is required.");
-            return;
+            return "First name is required.";
         }
 
         if (!form.last_name.trim()) {
-            setError("Last name is required.");
-            return;
+            return "Last name is required.";
         }
 
         if (!form.email.trim()) {
-            setError("Email is required.");
-            return;
+            return "Email is required.";
         }
 
         if (!form.phone.trim()) {
-            setError("Phone number is required.");
-            return;
+            return "Phone number is required.";
+        }
+
+        if (!/^[0-9]{10,15}$/.test(form.phone)) {
+            return "Please enter a valid phone number.";
         }
 
         if (!form.password) {
-            setError("Password is required.");
-            return;
+            return "Password is required.";
         }
 
         if (form.password.length < 6) {
-            setError(
-                "Password must contain at least 6 characters."
-            );
+            return "Password must contain at least 6 characters.";
+        }
+
+        if (!form.role) {
+            return "Please select a role.";
+        }
+
+        return "";
+    };
+
+    // Submit registration
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        setError("");
+
+        const validationError = validateForm();
+
+        if (validationError) {
+            setError(validationError);
             return;
         }
 
-
         try {
-
             setLoading(true);
 
-            await registerUser(form);
+            const response = await registerUser(form);
 
-            alert(
-                "Registration successful. Please login."
-            );
+            console.log("Registration response:", response);
+
+            alert("Registration successful!");
 
             navigate("/login");
-
         } catch (error) {
+            console.error("Registration error:", error);
 
-            console.error(
-                "Registration error:",
-                error
-            );
+            const responseData = error.response?.data;
 
-            const backendError =
-                error.response?.data;
+            // Backend validation errors
+            if (responseData?.errors) {
+                const errors = responseData.errors;
 
-            if (backendError) {
-
-                if (backendError.username) {
-
-                    setError(
-                        backendError.username[0]
-                    );
-
-                } else if (backendError.phone) {
-
-                    setError(
-                        backendError.phone[0]
-                    );
-
-                } else if (backendError.email) {
-
-                    setError(
-                        backendError.email[0]
-                    );
-
+                if (errors.username) {
+                    setError(errors.username[0]);
+                } else if (errors.email) {
+                    setError(errors.email[0]);
+                } else if (errors.phone) {
+                    setError(errors.phone[0]);
+                } else if (errors.first_name) {
+                    setError(errors.first_name[0]);
+                } else if (errors.last_name) {
+                    setError(errors.last_name[0]);
+                } else if (errors.password) {
+                    setError(errors.password[0]);
+                } else if (errors.role) {
+                    setError(errors.role[0]);
                 } else {
-
-                    setError(
-                        "Registration failed. Please check your details."
-                    );
-
+                    setError("Registration failed.");
                 }
-
+            } else if (responseData?.message) {
+                setError(responseData.message);
+            } else if (responseData?.detail) {
+                setError(responseData.detail);
             } else {
-
-                setError(
-                    "Unable to connect to the server."
-                );
-
+                setError("Unable to connect to the server.");
             }
-
         } finally {
-
             setLoading(false);
-
         }
-
     };
 
-
     return (
+        <Box className="register-page">
 
-        <Box
-            sx={{
-                minHeight: "90vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                background:
-                    "linear-gradient(135deg,#f5fff8,#f5f7ff)",
-                py: 5,
-                px: 2,
-            }}
-        >
+            <Paper className="register-card" elevation={5}>
 
-            <Paper
-                elevation={4}
-                sx={{
-                    width: "100%",
-                    maxWidth: 450,
-                    padding: {
-                        xs: 3,
-                        sm: 4,
-                    },
-                    borderRadius: 3,
-                }}
-            >
-
+                {/* Logo */}
                 <Typography
                     variant="h4"
-                    textAlign="center"
-                    fontWeight="bold"
-                    sx={{
-                        color: "#0aad4b",
-                        mb: 1,
-                    }}
+                    className="register-logo"
                 >
                     QuickKart
                 </Typography>
 
-
+                {/* Heading */}
                 <Typography
                     variant="h5"
-                    textAlign="center"
-                    fontWeight="bold"
-                    mb={1}
+                    className="register-title"
                 >
                     Create Account
                 </Typography>
 
-
                 <Typography
-                    textAlign="center"
-                    color="text.secondary"
-                    mb={3}
+                    className="register-subtitle"
                 >
                     Create your account and start shopping
                 </Typography>
 
-
+                {/* Error */}
                 {error && (
-
-                    <Box
-                        sx={{
-                            background: "#fff1f1",
-                            border: "1px solid #ffcaca",
-                            color: "#d32f2f",
-                            borderRadius: 1.5,
-                            padding: 1.5,
-                            mb: 2,
-                            fontSize: 14,
-                        }}
-                    >
+                    <Box className="register-error">
                         {error}
                     </Box>
-
                 )}
 
-
+                {/* Registration Form */}
                 <form onSubmit={handleSubmit}>
 
+                    {/* Username */}
                     <TextField
                         fullWidth
                         required
@@ -241,19 +190,11 @@ function Register() {
                         value={form.username}
                         margin="normal"
                         onChange={handleChange}
+                        autoComplete="username"
                     />
 
-
-                    <Box
-                        sx={{
-                            display: "grid",
-                            gridTemplateColumns: {
-                                xs: "1fr",
-                                sm: "1fr 1fr",
-                            },
-                            gap: 1.5,
-                        }}
-                    >
+                    {/* First + Last Name */}
+                    <Box className="name-row">
 
                         <TextField
                             fullWidth
@@ -263,8 +204,8 @@ function Register() {
                             value={form.first_name}
                             margin="normal"
                             onChange={handleChange}
+                            autoComplete="given-name"
                         />
-
 
                         <TextField
                             fullWidth
@@ -274,11 +215,12 @@ function Register() {
                             value={form.last_name}
                             margin="normal"
                             onChange={handleChange}
+                            autoComplete="family-name"
                         />
 
                     </Box>
 
-
+                    {/* Email */}
                     <TextField
                         fullWidth
                         required
@@ -288,27 +230,26 @@ function Register() {
                         value={form.email}
                         margin="normal"
                         onChange={handleChange}
+                        autoComplete="email"
                     />
 
-
-                    {/* IMPORTANT:
-                        name must be "phone"
-                    */}
-
+                    {/* Phone */}
                     <TextField
                         fullWidth
                         required
-                        label="Phone"
+                        label="Phone Number"
                         name="phone"
+                        type="tel"
                         value={form.phone}
                         margin="normal"
                         onChange={handleChange}
                         inputProps={{
                             maxLength: 15,
                         }}
+                        autoComplete="tel"
                     />
 
-
+                    {/* Password */}
                     <TextField
                         fullWidth
                         required
@@ -318,57 +259,66 @@ function Register() {
                         value={form.password}
                         margin="normal"
                         onChange={handleChange}
+                        autoComplete="new-password"
                     />
 
+                    {/* Role */}
+                    <TextField
+                        fullWidth
+                        required
+                        select
+                        label="Role"
+                        name="role"
+                        value={form.role}
+                        margin="normal"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value="CUSTOMER">
+                            Customer
+                        </MenuItem>
 
+                        <MenuItem value="ADMIN">
+                            Admin
+                        </MenuItem>
+
+                        <MenuItem value="STORE_MANAGER">
+                            Store Manager
+                        </MenuItem>
+
+                        <MenuItem value="DELIVERY_PARTNER">
+                            Delivery Partner
+                        </MenuItem>
+                    </TextField>
+
+                    {/* Register Button */}
                     <Button
                         fullWidth
                         variant="contained"
                         type="submit"
                         disabled={loading}
-                        sx={{
-                            mt: 3,
-                            height: 48,
-                            borderRadius: 2,
-                            backgroundColor: "#0aad4b",
-                            fontWeight: 700,
-                            textTransform: "none",
-                            fontSize: 16,
-                            "&:hover": {
-                                backgroundColor: "#078c3b",
-                            },
-                        }}
+                        className="register-button"
                     >
                         {loading
                             ? "Creating Account..."
-                            : "Register"}
+                            : "Create Account"}
                     </Button>
 
                 </form>
 
-
+                {/* Login */}
                 <Typography
-                    textAlign="center"
-                    mt={3}
-                    color="text.secondary"
+                    className="login-text"
                 >
                     Already have an account?{" "}
 
                     <Link
                         component="button"
                         type="button"
-                        onClick={() =>
-                            navigate("/login")
-                        }
-                        sx={{
-                            color: "#0aad4b",
-                            fontWeight: 600,
-                            textDecoration: "none",
-                        }}
+                        onClick={() => navigate("/login")}
+                        className="login-link"
                     >
                         Login
                     </Link>
-
                 </Typography>
 
             </Paper>

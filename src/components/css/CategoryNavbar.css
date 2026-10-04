@@ -106,3 +106,225 @@
         font-size: 20px;
     }
 }
+
+/* ================================
+   QUICKKART CATEGORY NAVBAR
+================================ */
+
+.category-navbar {
+    position: sticky;
+    top: 64px;
+    z-index: 900;
+
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid #eeeeee;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+
+/* ================================
+   CATEGORY CONTAINER
+================================ */
+
+.category-navbar-container {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    max-width: 1500px;
+
+    margin: 0 auto;
+
+    padding: 12px 20px;
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+
+    scroll-behavior: smooth;
+}
+
+.category-navbar-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* ================================
+   CATEGORY ITEM
+================================ */
+
+.category-navbar-item {
+    position: relative;
+
+    flex-shrink: 0;
+
+    border: none;
+
+    outline: none;
+
+    cursor: pointer;
+
+    padding: 9px 17px;
+
+    border-radius: 25px;
+
+    background: #f7f8f8;
+
+    color: #333333;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.1px;
+
+    white-space: nowrap;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* ================================
+   HOVER
+================================ */
+
+.category-navbar-item:hover {
+
+    background: linear-gradient(
+        135deg,
+        #e9fff1,
+        #dffff0
+    );
+
+    color: #07943f;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(10, 173, 75, 0.15);
+}
+
+
+/* ================================
+   CLICK EFFECT
+================================ */
+
+.category-navbar-item:active {
+    transform: scale(0.95);
+}
+
+
+/* ================================
+   ACTIVE / FOCUS
+================================ */
+
+.category-navbar-item:focus-visible {
+
+    background: #0aad4b;
+
+    color: white;
+
+    box-shadow:
+        0 4px 15px rgba(10, 173, 75, 0.25);
+}
+
+
+/* ================================
+   FIRST CATEGORY
+================================ */
+
+
+/* ================================
+   ACTIVE CATEGORY
+================================ */
+
+.category-navbar-item.active {
+
+    background: linear-gradient(
+        135deg,
+        #0aad4b,
+        #08c85a
+    );
+
+    color: white;
+
+    box-shadow:
+        0 5px 15px rgba(10, 173, 75, 0.25);
+
+    transform: translateY(-1px);
+}
+
+
+/* Active category hover */
+
+.category-navbar-item.active:hover {
+
+    background: linear-gradient(
+        135deg,
+        #078c3b,
+        #0aad4b
+    );
+
+    color: white;
+
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 768px) {
+
+    .category-navbar {
+        top: 56px;
+    }
+
+    .category-navbar-container {
+
+        gap: 8px;
+
+        padding: 10px 14px;
+    }
+
+    .category-navbar-item {
+
+        padding: 8px 14px;
+
+        font-size: 13px;
+    }
+}
+
+
+/* ================================
+   SMALL MOBILE
+================================ */
+
+@media (max-width: 480px) {
+
+    .category-navbar-container {
+        padding: 9px 10px;
+    }
+
+    .category-navbar-item {
+
+        padding: 7px 12px;
+
+        font-size: 12px;
+    }
+}

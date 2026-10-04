@@ -4,86 +4,128 @@ import {
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 
 import { getCategories } from "../services/categoryApi";
 import './css/CategoryNavbar.css';
 
+
 function CategoryNavbar() {
 
-    const [categories, setCategories] = useState([]);
-
     const navigate = useNavigate();
+    const location = useLocation();
 
-    useEffect(() => {
+    const categories = [
+        {
+            name: "Fashion",
+            slug: "fashion",
+            icon: "👗",
+        },
+        {
+            name: "Mobiles",
+            slug: "mobiles",
+            icon: "📱",
+        },
+        {
+            name: "Electronics",
+            slug: "electronics",
+            icon: "💻",
+        },
+        {
+            name: "Beauty",
+            slug: "beauty",
+            icon: "💄",
+        },
+        {
+            name: "Home",
+            slug: "home",
+            icon: "🏠",
+        },
+        {
+            name: "Appliances",
+            slug: "appliances",
+            icon: "🧊",
+        },
+        {
+            name: "Toys, Baby & Kids",
+            slug: "toys-baby-kids",
+            icon: "🧸",
+        },
+        {
+            name: "Food & Health",
+            slug: "food-health",
+            icon: "🥗",
+        },
+        {
+            name: "Auto Accessories",
+            slug: "auto-accessories",
+            icon: "🚗",
+        },
+        {
+            name: "Sports & Fitness",
+            slug: "sports-fitness",
+            icon: "🏋️",
+        },
+        {
+            name: "Furniture",
+            slug: "furniture",
+            icon: "🛋️",
+        },
+        {
+            name: "Books",
+            slug: "books",
+            icon: "📚",
+        },
+    ];
 
-        const loadCategories = async () => {
+    const handleCategoryClick = (category) => {
 
-            try {
+        navigate(`/category/${category.slug}`);
 
-                const data =
-                    await getCategories();
+    };
 
-                setCategories(
-                    data.results || data
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Category error:",
-                    error
-                );
-
-            }
-
-        };
-
-        loadCategories();
-
-    }, []);
 
     return (
+        <nav className="category-navbar">
 
-        <Box
-            sx={{
-                display: "flex",
-                overflowX: "auto",
-                gap: 1,
-                px: 2,
-                py: 1,
-                borderBottom: "1px solid #ddd",
-                background: "#fff",
+            <div className="category-navbar-container">
 
-                "&::-webkit-scrollbar": {
-                    height: 5,
-                },
-            }}
-        >
+                {categories.map((category) => {
 
-            {categories.map((category) => (
+                    // Check currently selected category
+                    const isActive =
+                        location.pathname ===
+                        `/category/${category.slug}`;
 
-                <Button
-                    key={category.id}
-                    sx={{
-                        minWidth: 100,
-                        whiteSpace: "nowrap",
-                        color: "#222",
-                    }}
-                    onClick={() =>
-                        navigate(
-                            `/category/${category.id}`
-                        )
-                    }
-                >
+                    return (
+                        <button
+                            key={category.slug}
+                            className={`category-navbar-item ${
+                                isActive
+                                    ? "active"
+                                    : ""
+                            }`}
+                            onClick={() =>
+                                handleCategoryClick(category)
+                            }
+                        >
 
-                    {category.name}
+                            <span className="category-icon">
+                                {category.icon}
+                            </span>
 
-                </Button>
+                            <span>
+                                {category.name}
+                            </span>
 
-            ))}
+                        </button>
+                    );
 
-        </Box>
+                })}
+
+            </div>
+
+        </nav>
     );
 }
 

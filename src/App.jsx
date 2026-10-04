@@ -2,6 +2,7 @@ import {
     BrowserRouter,
     Routes,
     Route,
+    useLocation,
 } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -17,15 +18,21 @@ import Cart from "./pages/Cart";
 import Profile from "./pages/Profile";
 import './App.css'
 
-function App() {
+
+function AppContent() {
+
+    const location = useLocation();
+
+    // Pages where navbar should be hidden
+    const hideNavbar =
+        location.pathname === "/login" ||
+        location.pathname === "/register";
 
     return (
+        <>
+            {!hideNavbar && <Navbar />}
 
-        <BrowserRouter>
-
-            <Navbar />
-
-            <CategoryNavbar />
+            {!hideNavbar && <CategoryNavbar />}
 
             <Routes>
 
@@ -70,9 +77,19 @@ function App() {
                 />
 
             </Routes>
+        </>
+    );
+}
 
+
+function App() {
+
+    return (
+        <BrowserRouter>
+            <AppContent />
         </BrowserRouter>
     );
 }
+
 
 export default App;
