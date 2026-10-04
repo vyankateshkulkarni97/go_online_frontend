@@ -1,0 +1,181 @@
+.auth-page {
+    min-height: calc(100vh - 130px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6fff9,
+            #f8f9ff
+        );
+}
+
+
+.auth-card {
+    width: 100%;
+    max-width: 430px;
+
+    background: #ffffff;
+
+    padding: 42px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0, 0, 0, 0.08);
+}
+
+
+.auth-logo {
+    text-align: center;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    color: #0aad4b;
+
+    margin-bottom: 20px;
+}
+
+
+.auth-card h1 {
+    text-align: center;
+
+    margin: 0;
+
+    font-size: 28px;
+
+    color: #222;
+}
+
+
+.auth-subtitle {
+    text-align: center;
+
+    color: #777;
+
+    margin: 8px 0 28px;
+}
+
+
+.auth-error {
+    background: #fff1f1;
+
+    border: 1px solid #ffcaca;
+
+    color: #d60000;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    margin-bottom: 18px;
+
+    font-size: 14px;
+}
+
+
+.auth-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.auth-form label {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #333;
+
+    margin-top: 8px;
+}
+
+
+.auth-form input {
+    height: 48px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 9px;
+
+    padding: 0 14px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+.auth-form input:focus {
+    border-color: #0aad4b;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(10, 173, 75, 0.1);
+}
+
+
+.auth-form button {
+    height: 50px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #0aad4b;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    margin-top: 18px;
+
+    transition: 0.2s;
+}
+
+
+.auth-form button:hover {
+    background: #078c3b;
+}
+
+
+.auth-form button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+.auth-bottom {
+    text-align: center;
+
+    margin-top: 24px;
+
+    color: #666;
+
+    font-size: 14px;
+}
+
+
+.auth-bottom a {
+    color: #0aad4b;
+
+    font-weight: 600;
+
+    margin-left: 5px;
+}
